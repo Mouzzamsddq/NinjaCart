@@ -26,7 +26,11 @@ class HomeViewModel @Inject constructor(
     // map for containing the ref of each points
     private val pointsMap = mutableMapOf<Double, View>()
 
-    fun loadHomePageData() {
+    init {
+        loadHomePageData()
+    }
+
+    private fun loadHomePageData() {
         viewModelScope.launch {
             _homePageLd.postValue(HomePageDataStatus.Loading)
             _homePageLd.postValue(homeRepository.getHomePageData())

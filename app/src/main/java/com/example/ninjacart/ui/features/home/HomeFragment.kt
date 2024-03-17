@@ -32,7 +32,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        homeViewModel.loadHomePageData()
         binding.itemRv.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = itemAdapter
