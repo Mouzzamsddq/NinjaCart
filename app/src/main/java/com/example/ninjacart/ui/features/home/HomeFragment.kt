@@ -6,11 +6,13 @@ import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.ninjacart.R
 import com.example.ninjacart.base.BaseFragment
 import com.example.ninjacart.data.features.home.response.Home
 import com.example.ninjacart.data.features.home.response.HomePageDataStatus
 import com.example.ninjacart.databinding.FragmentHomeBinding
+import com.example.ninjacart.ui.features.home.adapter.ItemAdapter
 import com.example.ninjacart.ui.features.home.viewmodel.HomeViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -19,10 +21,20 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
     FragmentHomeBinding::inflate,
 ) {
     private val homeViewModel: HomeViewModel by viewModels()
+    private val itemAdapter: ItemAdapter by lazy {
+        ItemAdapter(onIncClicked = {
+        }, onDecClicked = {
+        }, onManualQuantityClicked = {
+        })
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         homeViewModel.loadHomePageData()
-
+        binding.itemRv.apply {
+            layoutManager = LinearLayoutManager(context)
+            adapter = itemAdapter
+        }
         subscribeToObserve()
     }
 
@@ -55,9 +67,16 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
         binding.apply {
             minPriceTv.text = home.min.toString()
             maxPriceTv.text = home.max.toString()
+            itemAdapter.updateDataSet(home.items)
             home.points.forEach {
-                if (!homeViewModel.isPointAlreadyExist(it.value) && it.value >= home.min && it.value <= home.max && !homeViewModel.isNearByPointExist(it.value)) {
-                    homeViewModel.addPointsToMap(it.value, createCircularPointsOnProgressBar(home.max, it.value))
+                if (!homeViewModel.isPointAlreadyExist(it.value) && it.value >= home.min && it.value <= home.max && !homeViewModel.isNearByPointExist(
+                        it.value,
+                    )
+                ) {
+                    homeViewModel.addPointsToMap(
+                        it.value,
+                        createCircularPointsOnProgressBar(home.max, it.value),
+                    )
                 }
             }
         }
