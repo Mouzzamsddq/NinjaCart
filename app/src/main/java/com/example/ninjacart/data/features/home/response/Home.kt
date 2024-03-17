@@ -1,14 +1,24 @@
 package com.example.ninjacart.data.features.home.response
 
-import com.google.gson.annotations.SerializedName
+data class Item(
+    val eachQtyValue: Int,
+    val multiple: Int,
+    val name: String,
+) {
+    constructor() : this(0, 0, "")
+}
+
+data class Point(
+    val value: Int,
+) {
+    constructor() : this(0)
+}
 
 data class Home(
-    @SerializedName("items")
-    val items: List<Item?>? = null,
-    @SerializedName("max")
-    val max: Int? = null,
-    @SerializedName("min")
-    val min: Int? = null,
-    @SerializedName("points")
-    val points: List<Int?>? = null,
-)
+    val items: List<Item>,
+    val max: Int,
+    val min: Int,
+    val points: List<Point>,
+) {
+    constructor() : this(emptyList(), 0, 0, emptyList())
+}

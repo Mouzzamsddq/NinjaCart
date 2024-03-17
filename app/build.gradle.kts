@@ -56,6 +56,7 @@ dependencies {
     val fragmentVersion = "1.6.2"
     val retrofit = "2.9.0"
     val converter = "2.9.0"
+    val navVersion = "2.5.3"
 
     // live data and  view model
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion")
@@ -96,6 +97,10 @@ dependencies {
     // firebase bom
     implementation(platform("com.google.firebase:firebase-bom:32.7.4"))
     implementation("com.google.firebase:firebase-database")
+
+    // navigation component
+    implementation("androidx.navigation:navigation-fragment-ktx:$navVersion")
+    implementation("androidx.navigation:navigation-ui-ktx:$navVersion")
 }
 
 kapt {

@@ -7,5 +7,5 @@ class HomeRepository @Inject constructor(
     private val homeRemoteDataSource: HomeRemoteDataSource,
 ) {
 
-    fun getHomePageData() = homeRemoteDataSource.getHomePageData()
+    suspend fun getHomePageData() = homeRemoteDataSource.getHomePageData()
 }
