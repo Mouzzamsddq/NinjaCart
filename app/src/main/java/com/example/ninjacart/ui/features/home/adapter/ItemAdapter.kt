@@ -27,18 +27,18 @@ class ItemAdapter(
     ) : RecyclerView.ViewHolder(
         binding.root,
     ) {
-        fun bind(item: Item) {
+        fun bind(item: Item, position: Int) {
             binding.apply {
                 if (item.name.isNotBlank()) {
                     tvItemName.text = item.name
                 }
                 tvPrice.text = item.eachQtyValue.toString()
-                tvQuantity.text = item.multiple.toString()
+                tvQuantity.text = item.boughtQuantity.toString()
                 ibAdd.setOnClickListener {
-                     onIncClicked(item.multiple)
+                     onIncClicked(position)
                 }
                 ibRemove.setOnClickListener {
-                    onDecClicked(item.multiple)
+                    onDecClicked(position)
                 }
                 tvQuantity.setOnClickListener {
                     onManualQuantityClicked(item.multiple)
@@ -62,7 +62,7 @@ class ItemAdapter(
 
     override fun onBindViewHolder(holder: ItemVH, position: Int) {
         itemList.getOrNull(position)?.let {
-            holder.bind(it)
+            holder.bind(it, position)
         }
     }
 }
