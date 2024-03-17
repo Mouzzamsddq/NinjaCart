@@ -20,6 +20,7 @@ class HomeViewModel @Inject constructor(
 
     fun loadHomePageData() {
         viewModelScope.launch {
+            _homePageLd.postValue(HomePageDataStatus.Loading)
             _homePageLd.postValue(homeRepository.getHomePageData())
         }
     }
