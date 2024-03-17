@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1039115115932",
+    "project_id": "ninjacart-6688a",
+    "storage_bucket": "ninjacart-6688a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1039115115932:android:214541c2cc4cbb781ffc59",
+        "android_client_info": {
+          "package_name": "com.example.ninjacart"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDSBcaAsbAR2zON2QjGiOVpUtoMvAqqWLI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

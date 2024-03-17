@@ -2,6 +2,7 @@ package com.example.ninjacart.ui.features.home
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.fragment.app.viewModels
 import com.example.ninjacart.base.BaseFragment
 import com.example.ninjacart.databinding.FragmentHomeBinding
@@ -15,6 +16,14 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
     private val homeViewModel: HomeViewModel by viewModels()
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        homeViewModel.loadHomePageData()
+        subscribeToObserve()
+    }
+
+    private fun subscribeToObserve() {
+        homeViewModel.homePageLd.observe(viewLifecycleOwner) {
+
+        }
     }
 }
 
