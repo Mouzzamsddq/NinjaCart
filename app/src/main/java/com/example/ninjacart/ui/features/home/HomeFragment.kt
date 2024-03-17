@@ -22,8 +22,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
 ) {
     private val homeViewModel: HomeViewModel by viewModels()
     private val itemAdapter: ItemAdapter by lazy {
-        ItemAdapter()
+        ItemAdapter(onIncClicked = {
+        }, onDecClicked = {
+        }, onManualQuantityClicked = {
+        })
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         homeViewModel.loadHomePageData()
@@ -65,8 +69,14 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
             maxPriceTv.text = home.max.toString()
             itemAdapter.updateDataSet(home.items)
             home.points.forEach {
-                if (!homeViewModel.isPointAlreadyExist(it.value) && it.value >= home.min && it.value <= home.max && !homeViewModel.isNearByPointExist(it.value)) {
-                    homeViewModel.addPointsToMap(it.value, createCircularPointsOnProgressBar(home.max, it.value))
+                if (!homeViewModel.isPointAlreadyExist(it.value) && it.value >= home.min && it.value <= home.max && !homeViewModel.isNearByPointExist(
+                        it.value,
+                    )
+                ) {
+                    homeViewModel.addPointsToMap(
+                        it.value,
+                        createCircularPointsOnProgressBar(home.max, it.value),
+                    )
                 }
             }
         }

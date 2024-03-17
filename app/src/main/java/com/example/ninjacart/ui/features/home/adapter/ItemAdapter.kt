@@ -6,7 +6,11 @@ import com.example.ninjacart.data.features.home.response.Item
 import com.example.ninjacart.databinding.ItemLayoutBinding
 import com.example.ninjacart.utils.viewBinding
 
-class ItemAdapter : RecyclerView.Adapter<ItemAdapter.ItemVH>() {
+class ItemAdapter(
+    private val onIncClicked: (Int) -> Unit,
+    private val onDecClicked: (Int) -> Unit,
+    private val onManualQuantityClicked: (Int) -> Unit
+) : RecyclerView.Adapter<ItemAdapter.ItemVH>() {
 
     private var itemList = listOf<Item>()
 
@@ -17,6 +21,9 @@ class ItemAdapter : RecyclerView.Adapter<ItemAdapter.ItemVH>() {
 
     class ItemVH(
         private val binding: ItemLayoutBinding,
+        private val onIncClicked: (Int) -> Unit,
+        private val onDecClicked: (Int) -> Unit,
+        private val onManualQuantityClicked: (Int) -> Unit
     ) : RecyclerView.ViewHolder(
         binding.root,
     ) {
@@ -27,6 +34,15 @@ class ItemAdapter : RecyclerView.Adapter<ItemAdapter.ItemVH>() {
                 }
                 tvPrice.text = item.eachQtyValue.toString()
                 tvQuantity.text = item.multiple.toString()
+                ibAdd.setOnClickListener {
+                     onIncClicked(item.multiple)
+                }
+                ibRemove.setOnClickListener {
+                    onDecClicked(item.multiple)
+                }
+                tvQuantity.setOnClickListener {
+                    onManualQuantityClicked(item.multiple)
+                }
             }
         }
     }
@@ -34,6 +50,9 @@ class ItemAdapter : RecyclerView.Adapter<ItemAdapter.ItemVH>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemVH {
         return ItemVH(
             binding = parent.viewBinding(ItemLayoutBinding::inflate),
+            onIncClicked = onIncClicked,
+            onDecClicked = onDecClicked,
+            onManualQuantityClicked = onManualQuantityClicked
         )
     }
 
