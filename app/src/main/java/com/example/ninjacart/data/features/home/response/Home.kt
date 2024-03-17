@@ -4,8 +4,9 @@ data class Item(
     val eachQtyValue: Int,
     val multiple: Int,
     val name: String,
+    var boughtQuantity: Int,
 ) {
-    constructor() : this(0, 0, "")
+    constructor() : this(0, 0, "", 0)
 }
 
 data class Point(

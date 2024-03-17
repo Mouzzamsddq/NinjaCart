@@ -22,8 +22,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
 ) {
     private val homeViewModel: HomeViewModel by viewModels()
     private val itemAdapter: ItemAdapter by lazy {
-        ItemAdapter(onIncClicked = {
-        }, onDecClicked = {
+        ItemAdapter(onIncClicked = { pos ->
+            homeViewModel.incrementQty(pos)
+        }, onDecClicked = { pos ->
+            homeViewModel.decrementQty(pos)
         }, onManualQuantityClicked = {
         })
     }
@@ -61,12 +63,25 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
                 }
             }
         }
+        homeViewModel.finalPrice.observe(viewLifecycleOwner) {
+            it?.let { price ->
+                binding.totalPriceTv.text = price.toString()
+                homeViewModel.getPointsMap().forEach { (point, view) ->
+                    if (point <= price) {
+                        view.setBackgroundResource(R.drawable.circle_background)
+                    } else {
+                        view.setBackgroundResource(R.drawable.black_circle_background)
+                    }
+                }
+            }
+        }
     }
 
     private fun setupHomePageView(home: Home) {
         binding.apply {
             minPriceTv.text = home.min.toString()
             maxPriceTv.text = home.max.toString()
+            homeViewModel.calculateFinalPrice()
             itemAdapter.updateDataSet(home.items)
             home.points.forEach {
                 if (!homeViewModel.isPointAlreadyExist(it.value) && it.value >= home.min && it.value <= home.max && !homeViewModel.isNearByPointExist(

@@ -69,6 +69,27 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <TextView
+        android:id="@+id/total_price_label_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_20"
+        android:text="Total Price:"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/progress_cl" />
+
+
+    <TextView
+        android:id="@+id/total_price_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_20"
+        android:text="200"
+        android:textColor="@android:color/holo_green_dark"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@id/total_price_label_tv"
+        app:layout_constraintTop_toBottomOf="@id/progress_cl" />
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/item_rv"
@@ -76,6 +97,6 @@
         android:layout_height="@dimen/margin_0"
         android:layout_margin="@dimen/margin_20"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/progress_cl" />
+        app:layout_constraintTop_toBottomOf="@id/total_price_label_tv" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
