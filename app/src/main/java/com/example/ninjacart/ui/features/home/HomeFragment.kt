@@ -68,16 +68,15 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
             val view = View(context)
             view.id = View.generateViewId()
             view.layoutParams = ConstraintLayout.LayoutParams(
-                resources.getDimensionPixelSize(R.dimen.margin_20),
-                resources.getDimensionPixelSize(R.dimen.margin_20),
+                resources.getDimensionPixelSize(R.dimen.margin_12),
+                resources.getDimensionPixelSize(R.dimen.margin_12),
             )
-            view.setBackgroundResource(R.drawable.circle_background)
+            view.setBackgroundResource(R.drawable.black_circle_background)
             val layoutParams = view.layoutParams as ConstraintLayout.LayoutParams
             layoutParams.startToStart = ConstraintLayout.LayoutParams.PARENT_ID
             layoutParams.topToTop = ConstraintLayout.LayoutParams.PARENT_ID
+            layoutParams.bottomToBottom = ConstraintLayout.LayoutParams.PARENT_ID
             val widthOfProgressBar = pricePb.width.toDouble()
-            val displayMetrics = resources.displayMetrics
-            val dpWidthOfProgressBar = widthOfProgressBar / displayMetrics.density
             val startMargin = (widthOfProgressBar / max) * point
 
             layoutParams.marginStart = startMargin.toInt()
