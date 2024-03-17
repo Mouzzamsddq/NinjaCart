@@ -3,9 +3,12 @@ package com.example.ninjacart.ui.features.home
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import com.example.ninjacart.R
 import com.example.ninjacart.base.BaseFragment
+import com.example.ninjacart.data.features.home.response.Home
 import com.example.ninjacart.data.features.home.response.HomePageDataStatus
 import com.example.ninjacart.databinding.FragmentHomeBinding
 import com.example.ninjacart.ui.features.home.viewmodel.HomeViewModel
@@ -19,6 +22,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         homeViewModel.loadHomePageData()
+
         subscribeToObserve()
     }
 
@@ -26,10 +30,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
         homeViewModel.homePageLd.observe(viewLifecycleOwner) {
             when (it) {
                 is HomePageDataStatus.Success -> {
-                    binding.apply {
-                        centerCircularPb.isVisible = false
-                        minPriceTv.text = it.home?.min?.toString() ?: ""
-                        maxPriceTv.text = it.home?.max?.toString() ?: ""
+                    binding.centerCircularPb.isVisible = false
+                    it.home?.let { home ->
+                        setupHomePageView(home)
+                    } ?: {
+                        Toast.makeText(context, "Failed to load the data...!", Toast.LENGTH_SHORT)
+                            .show()
                     }
                 }
 
@@ -42,6 +48,41 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
                     binding.centerCircularPb.isVisible = true
                 }
             }
+        }
+    }
+
+    private fun setupHomePageView(home: Home) {
+        binding.apply {
+            minPriceTv.text = home.min.toString()
+            maxPriceTv.text = home.max.toString()
+            home.points.forEach {
+                if (!homeViewModel.isPointAlreadyExist(it.value) && it.value >= home.min && it.value <= home.max && !homeViewModel.isNearByPointExist(it.value)) {
+                    homeViewModel.addPointsToMap(it.value, createCircularPointsOnProgressBar(home.max, it.value))
+                }
+            }
+        }
+    }
+
+    private fun createCircularPointsOnProgressBar(max: Double, point: Double): View {
+        binding.apply {
+            val view = View(context)
+            view.id = View.generateViewId()
+            view.layoutParams = ConstraintLayout.LayoutParams(
+                resources.getDimensionPixelSize(R.dimen.margin_20),
+                resources.getDimensionPixelSize(R.dimen.margin_20),
+            )
+            view.setBackgroundResource(R.drawable.circle_background)
+            val layoutParams = view.layoutParams as ConstraintLayout.LayoutParams
+            layoutParams.startToStart = ConstraintLayout.LayoutParams.PARENT_ID
+            layoutParams.topToTop = ConstraintLayout.LayoutParams.PARENT_ID
+            val widthOfProgressBar = pricePb.width.toDouble()
+            val displayMetrics = resources.displayMetrics
+            val dpWidthOfProgressBar = widthOfProgressBar / displayMetrics.density
+            val startMargin = (widthOfProgressBar / max) * point
+
+            layoutParams.marginStart = startMargin.toInt()
+            customProgressCl.addView(view)
+            return view
         }
     }
 }

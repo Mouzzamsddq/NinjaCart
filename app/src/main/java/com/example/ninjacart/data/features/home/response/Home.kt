@@ -9,16 +9,16 @@ data class Item(
 }
 
 data class Point(
-    val value: Int,
+    val value: Double,
 ) {
-    constructor() : this(0)
+    constructor() : this(0.0)
 }
 
 data class Home(
     val items: List<Item>,
-    val max: Int,
-    val min: Int,
+    val max: Double,
+    val min: Double,
     val points: List<Point>,
 ) {
-    constructor() : this(emptyList(), 0, 0, emptyList())
+    constructor() : this(emptyList(), 0.0, 0.0, emptyList())
 }
