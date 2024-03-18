@@ -14,6 +14,7 @@ import com.example.ninjacart.data.features.home.response.HomePageDataStatus
 import com.example.ninjacart.databinding.FragmentHomeBinding
 import com.example.ninjacart.ui.features.home.adapter.ItemAdapter
 import com.example.ninjacart.ui.features.home.viewmodel.HomeViewModel
+import com.example.ninjacart.ui.features.quantityselection.ManualQuantitySelectionDialog
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -27,6 +28,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
         }, onDecClicked = { pos ->
             homeViewModel.decrementQty(pos)
         }, onManualQuantityClicked = {
+            val qtyDialogFragment = childFragmentManager.findFragmentByTag("qty")
+            if (qtyDialogFragment == null) {
+                val qtyDialogFragment = ManualQuantitySelectionDialog()
+                qtyDialogFragment.show(childFragmentManager, "qty")
+            }
         })
     }
 
