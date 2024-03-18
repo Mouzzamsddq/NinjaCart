@@ -28,9 +28,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
         }, onDecClicked = { pos ->
             homeViewModel.decrementQty(pos)
         }, onManualQuantityClicked = {
-            val qtyDialogFragment = childFragmentManager.findFragmentByTag("qty")
+            val qtyDialogFragment =
+                childFragmentManager.findFragmentByTag("qty") as? ManualQuantitySelectionDialog
             if (qtyDialogFragment == null) {
-                val qtyDialogFragment = ManualQuantitySelectionDialog()
+                val qtyDialogFragment = ManualQuantitySelectionDialog(it)
                 qtyDialogFragment.show(childFragmentManager, "qty")
             }
         })
