@@ -18,27 +18,35 @@ import com.example.ninjacart.ui.features.quantityselection.ManualQuantitySelecti
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class HomeFragment : BaseFragment<FragmentHomeBinding>(
-    FragmentHomeBinding::inflate,
-) {
+class HomeFragment :
+    BaseFragment<FragmentHomeBinding>(
+        FragmentHomeBinding::inflate,
+    ),
+    ManualQtySelectionListener {
     private val homeViewModel: HomeViewModel by viewModels()
     private val itemAdapter: ItemAdapter by lazy {
         ItemAdapter(onIncClicked = { pos ->
             homeViewModel.incrementQty(pos)
         }, onDecClicked = { pos ->
             homeViewModel.decrementQty(pos)
-        }, onManualQuantityClicked = {
+        }, onManualQuantityClicked = { pos, multiple ->
             val qtyDialogFragment =
                 childFragmentManager.findFragmentByTag("qty") as? ManualQuantitySelectionDialog
             if (qtyDialogFragment == null) {
-                val qtyDialogFragment = ManualQuantitySelectionDialog(it)
+                val qtyDialogFragment = ManualQuantitySelectionDialog(pos, multiple)
+                qtyDialogFragment.setListener(this@HomeFragment)
                 qtyDialogFragment.show(childFragmentManager, "qty")
+            } else {
+                qtyDialogFragment.setListener(this@HomeFragment)
             }
         })
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val qtyDialogFragment =
+            childFragmentManager.findFragmentByTag("qty") as? ManualQuantitySelectionDialog
+        qtyDialogFragment?.setListener(this@HomeFragment)
         binding.itemRv.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = itemAdapter
@@ -123,5 +131,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
             customProgressCl.addView(view)
             return view
         }
+    }
+
+    override fun onManualQuantitySelected(itemPos: Int, qty: Int) {
+        homeViewModel.setItemQuantity(pos = itemPos, qty = qty)
     }
 }

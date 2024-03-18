@@ -87,4 +87,17 @@ class HomeViewModel @Inject constructor(
     }
 
     fun getPointsMap() = pointsMap
+
+    fun setItemQuantity(pos: Int, qty: Int) {
+        (_homePageLd.value as? HomePageDataStatus.Success)?.let {
+            it.home?.items?.getOrNull(pos)?.let {
+                if (qty >= 0) {
+                    it.boughtQuantity = qty
+                } else {
+                    _homePageLd.postValue(HomePageDataStatus.Error("Invalid quantity...!"))
+                }
+            }
+            _homePageLd.postValue(it)
+        }
+    }
 }

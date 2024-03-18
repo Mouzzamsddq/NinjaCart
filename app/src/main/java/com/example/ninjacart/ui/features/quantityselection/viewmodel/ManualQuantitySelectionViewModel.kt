@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 class ManualQuantitySelectionViewModel : ViewModel() {
     private var multiple: Int = 0
     private var selectedPos: Int = -1
+    private var itemPos: Int = -1
 
     private val _qtyData = MutableLiveData<List<Int>>()
     val qtyData: LiveData<List<Int>> = _qtyData
@@ -30,4 +31,12 @@ class ManualQuantitySelectionViewModel : ViewModel() {
     }
 
     fun getSelectedPos() = selectedPos
+
+    fun setItmPos(pos: Int) {
+        this.itemPos = pos
+    }
+
+    fun getItemPos() = itemPos
+
+    fun getSelectedQuantity() = _qtyData.value?.get(selectedPos) ?: 0
 }

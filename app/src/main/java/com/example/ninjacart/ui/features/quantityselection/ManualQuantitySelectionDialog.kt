@@ -7,16 +7,20 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.ninjacart.base.BaseDialogFragment
 import com.example.ninjacart.databinding.ManualQuantitySelectionLayoutBinding
+import com.example.ninjacart.ui.features.home.ManualQtySelectionListener
 import com.example.ninjacart.ui.features.quantityselection.adapter.QtyItemAdapter
 import com.example.ninjacart.ui.features.quantityselection.viewmodel.ManualQuantitySelectionViewModel
 
 class ManualQuantitySelectionDialog(
+    private val pos: Int,
     private var multiple: Int,
 ) : BaseDialogFragment<ManualQuantitySelectionLayoutBinding>(
     ManualQuantitySelectionLayoutBinding::inflate,
 ) {
 
-    constructor() : this(-1)
+    private var listener: ManualQtySelectionListener? = null
+
+    constructor() : this(-1, -1)
 
     private val viewModel: ManualQuantitySelectionViewModel by viewModels()
     private val qtyItemAdapter: QtyItemAdapter by lazy {
@@ -45,6 +49,11 @@ class ManualQuantitySelectionDialog(
                 adapter = qtyItemAdapter
             }
             okBtn.setOnClickListener {
+                listener?.onManualQuantitySelected(
+                    viewModel.getItemPos(),
+                    viewModel.getSelectedQuantity(),
+                )
+                dismiss()
             }
             cancelBtn.setOnClickListener {
                 dismiss()
@@ -52,7 +61,10 @@ class ManualQuantitySelectionDialog(
         }
         subscribeToObserve()
         viewModel.calculateQuantities(if (multiple == -1) viewModel.getCurrentMultiple() else multiple)
-        if(multiple == -1) {
+        if (pos != -1) {
+            viewModel.setItmPos(pos)
+        }
+        if (multiple == -1) {
             qtyItemAdapter.setSelectedItem(viewModel.getSelectedPos())
         }
     }
@@ -61,5 +73,9 @@ class ManualQuantitySelectionDialog(
         viewModel.qtyData.observe(viewLifecycleOwner) {
             qtyItemAdapter.updateDataSet(it)
         }
+    }
+
+    fun setListener(listener: ManualQtySelectionListener) {
+        this.listener = listener
     }
 }

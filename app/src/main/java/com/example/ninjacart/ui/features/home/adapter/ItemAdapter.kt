@@ -9,7 +9,7 @@ import com.example.ninjacart.utils.viewBinding
 class ItemAdapter(
     private val onIncClicked: (Int) -> Unit,
     private val onDecClicked: (Int) -> Unit,
-    private val onManualQuantityClicked: (Int) -> Unit,
+    private val onManualQuantityClicked: (Int, Int) -> Unit,
 ) : RecyclerView.Adapter<ItemAdapter.ItemVH>() {
 
     private var itemList = listOf<Item>()
@@ -23,7 +23,7 @@ class ItemAdapter(
         private val binding: ItemLayoutBinding,
         private val onIncClicked: (Int) -> Unit,
         private val onDecClicked: (Int) -> Unit,
-        private val onManualQuantityClicked: (Int) -> Unit,
+        private val onManualQuantityClicked: (Int, Int) -> Unit,
     ) : RecyclerView.ViewHolder(
         binding.root,
     ) {
@@ -41,7 +41,7 @@ class ItemAdapter(
                     onDecClicked(position)
                 }
                 tvQuantity.setOnClickListener {
-                    onManualQuantityClicked(item.multiple)
+                    onManualQuantityClicked(position, item.multiple)
                 }
             }
         }
@@ -65,6 +65,4 @@ class ItemAdapter(
             holder.bind(it, position)
         }
     }
-
-
 }
