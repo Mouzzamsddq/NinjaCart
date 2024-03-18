@@ -100,4 +100,6 @@ class HomeViewModel @Inject constructor(
             _homePageLd.postValue(it)
         }
     }
+
+    fun clearMap() = pointsMap.clear()
 }

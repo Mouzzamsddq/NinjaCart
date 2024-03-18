@@ -30,10 +30,10 @@ class HomeFragment :
         }, onDecClicked = { pos ->
             homeViewModel.decrementQty(pos)
         }, onManualQuantityClicked = { pos, multiple ->
-            val qtyDialogFragment =
+            var qtyDialogFragment =
                 childFragmentManager.findFragmentByTag("qty") as? ManualQuantitySelectionDialog
             if (qtyDialogFragment == null) {
-                val qtyDialogFragment = ManualQuantitySelectionDialog(pos, multiple)
+                qtyDialogFragment = ManualQuantitySelectionDialog(pos, multiple)
                 qtyDialogFragment.setListener(this@HomeFragment)
                 qtyDialogFragment.show(childFragmentManager, "qty")
             } else {
@@ -44,6 +44,7 @@ class HomeFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        homeViewModel.clearMap()
         val qtyDialogFragment =
             childFragmentManager.findFragmentByTag("qty") as? ManualQuantitySelectionDialog
         qtyDialogFragment?.setListener(this@HomeFragment)
@@ -102,16 +103,13 @@ class HomeFragment :
                         it.value,
                     )
                 ) {
-                    homeViewModel.addPointsToMap(
-                        it.value,
-                        createCircularPointsOnProgressBar(home.max, it.value),
-                    )
+                    createCircularPointsOnProgressBar(home.max, it.value)
                 }
             }
         }
     }
 
-    private fun createCircularPointsOnProgressBar(max: Double, point: Double): View {
+    private fun createCircularPointsOnProgressBar(max: Double, point: Double) {
         binding.apply {
             val view = View(context)
             view.id = View.generateViewId()
@@ -124,12 +122,16 @@ class HomeFragment :
             layoutParams.startToStart = ConstraintLayout.LayoutParams.PARENT_ID
             layoutParams.topToTop = ConstraintLayout.LayoutParams.PARENT_ID
             layoutParams.bottomToBottom = ConstraintLayout.LayoutParams.PARENT_ID
-            val widthOfProgressBar = pricePb.width.toDouble()
-            val startMargin = (widthOfProgressBar / max) * point
-
-            layoutParams.marginStart = startMargin.toInt()
-            customProgressCl.addView(view)
-            return view
+            pricePb.post {
+                val widthOfProgressBar = pricePb.width.toDouble()
+                val startMargin = (widthOfProgressBar / max) * point
+                layoutParams.marginStart = startMargin.toInt()
+                customProgressCl.addView(view)
+                homeViewModel.addPointsToMap(
+                    point,
+                    view
+                )
+            }
         }
     }
 
